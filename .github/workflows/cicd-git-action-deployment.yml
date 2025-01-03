@@ -6,15 +6,19 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Mule CICD with Mule Maven Plugni
+name: Mule CICD with Mule Maven Plugin
+
 on:
   push:
     branches: [ "dev" ]
   pull_request:
     branches: [ "dev" ]
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
     - uses: actions/cache@v3
@@ -60,5 +64,5 @@ jobs:
         anypointPassword: ${{ secrets.ANYPOINT_PASSWORD }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -DmuleDeploy -Dmule.artifact=$artifactName -Danypoint.username="$anypointUsername" -Danypoint.password="$anypointPassword" -DworkerType=MICRO -Dworkers=1 -Dregion=us-east-2 -Denvironment=DEV -Dcloudhub.application.name=git-action-auto-deployment
+        mvn deploy -DmuleDeploy -Dmule.artifact=$artifactName -Danypoint.username="$anypointUsername" -Danypoint.password="$anypointPassword" -DworkerType=MICRO -Dworkers=1 -Dregion=us-east-2 -Denvironment=sandbox -Dcloudhub.application.name=git-action-auto-deployment
 

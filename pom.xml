@@ -31,13 +31,14 @@
                     <applicationName>git-action-auto-deployment</applicationName>
                     <environment>DEV</environment>
                     <region>us-east-2</region>
-                    <workersAmount>1</workersAmount>
+                    <workers>1</workers> 
                     <workerType>MICRO</workerType>
                 </cloudHubDeployment>
             </configuration>
         </plugin>
     </plugins>
 </build>
+
 
 
     <dependencies>

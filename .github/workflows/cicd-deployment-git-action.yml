@@ -30,16 +30,12 @@ jobs:
         distribution: 'temurin'
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: Stamp artifact file name with commit hash
-      run: |
-          artifactName=$(ls target/*.jar | head -1)
-          commitHash=$(git rev-parse --short "$GITHUB_SHA")
-          artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar\$/$commitHash.jar/")
-          mv $artifactName $artifactName2
-    - uses: actions/upload-artifact@v3
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
       with:
           name: artifacts
           path: target/*.jar
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -54,12 +50,16 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-    - name: Deploy to CloudHub Dev env
+    - name: Deploy to CloudHub
       env:
-        anypointUsername: ${{ secrets.ANYPOINT_USERNAME }}
-        anypointPassword: ${{ secrets.ANYPOINT_PASSWORD }}
+        ANYPOINT_USERNAME: ${{ secrets.ANYPOINT_USERNAME }}
+        ANYPOINT_PASSWORD: ${{ secrets.ANYPOINT_PASSWORD }}
       run: |
-        artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Danypoint.username="$anypointUsername" -Danypoint.password="$anypointPassword" -DapplicationName=git-action-auto-deployment -Dworkers=1 -DworkerType=MICRO -Denvironment=DEV -Dregion=us-east-2
-
+        mvn mule:deploy -Danypoint.username=$ANYPOINT_USERNAME \
+                        -Danypoint.password=$ANYPOINT_PASSWORD \
+                        -DapplicationName=git-action-auto-deployment \
+                        -Denvironment=DEV \
+                        -Dregion=us-east-2 \
+                        -Dworkers=1 \
+                        -DworkerType=MICRO
 

@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Mule CICD with Mule Maven Plugni
+name: Mule CICD with Mule Maven Plugin
 on:
   push:
     branches: [ "dev" ]
@@ -36,11 +36,11 @@ jobs:
           commitHash=$(git rev-parse --short "$GITHUB_SHA")
           artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar\$/$commitHash.jar/")
           mv $artifactName $artifactName2
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@v3
       with:
           name: artifacts
           path: target/*.jar
-  depoly:
+  deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -51,7 +51,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-    - uses: actions/download-artifact@master
+    - uses: actions/download-artifact@v3
       with:
         name: artifacts
     - name: Deploy to CloudHub Dev env
@@ -60,5 +60,6 @@ jobs:
         anypointPassword: ${{ secrets.ANYPOINT_PASSWORD }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -DmuleDeploy -Dmule.artifact=$artifactName -Danypoint.username="$anypointUsername" -Danypoint.password="$anypointPassword" -DworkerType=MICRO -Dworkers=1 -Dregion=us-east-2 -Denvironment=DEV -Dcloudhub.application.name=git-action-auto-deployment
+        mvn mule:deploy -Danypoint.username="$anypointUsername" -Danypoint.password="$anypointPassword" -DapplicationName=git-action-auto-deployment -Dworkers=1 -DworkerType=MICRO -Denvironment=DEV -Dregion=us-east-2
+
 

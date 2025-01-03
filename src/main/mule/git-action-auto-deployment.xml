@@ -17,6 +17,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 output application/json
 ---
 {
+"Status": "Success",
 "Message": "Git Action Deploy Mule Application Automatically"
 }]]></ee:set-payload>
 			</ee:message>

@@ -8,6 +8,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="62f28501-5b96-4aac-8200-e2bc5d572fca" >
 		<http:listener-connection host="0.0.0.0" port="8082" />
 	</http:listener-config>
+	<global-property doc:name="Global Property" doc:id="1f01e207-45b9-477b-ab80-37a8cb97e161" name="env" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="90c5099d-cfe5-4eea-861e-ccb17e141ff7" file="config-pro\dev-property.yaml" />
 	<flow name="git-action-auto-deploymentFlow" doc:id="2357ed31-a185-4cf7-9f62-c276c4dc73b8" >
 		<http:listener doc:name="Listener" doc:id="3293becf-c603-43f5-b852-3ecad42d1905" config-ref="HTTP_Listener_config" path="/cicd"/>
 		<logger level="INFO" doc:name="Logger" doc:id="9e886c27-d7b2-44f0-8ca5-81b31d3be78f" message="start flow"/>

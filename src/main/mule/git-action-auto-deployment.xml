@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="62f28501-5b96-4aac-8200-e2bc5d572fca" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<flow name="git-action-auto-deploymentFlow" doc:id="2357ed31-a185-4cf7-9f62-c276c4dc73b8" >
+		<http:listener doc:name="Listener" doc:id="3293becf-c603-43f5-b852-3ecad42d1905" config-ref="HTTP_Listener_config" path="/cicd"/>
+		<logger level="INFO" doc:name="Logger" doc:id="9e886c27-d7b2-44f0-8ca5-81b31d3be78f" message="start flow"/>
+		<ee:transform doc:name="Transform Message" doc:id="539bdd72-b276-4e3d-9d56-b5317f0b461e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+"Message": "Git Action Deploy Mule Application Automatically"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="c211adac-ebb4-42f0-aafc-21303f8a90c4" message="end flow"/>
+	</flow>
+</mule>
